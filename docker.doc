@@ -1,0 +1,34 @@
+# Set the base image
+FROM python:3.9-slim
+
+# Set the maintainer label
+LABEL maintainer="Your Name <your.email@example.com>"
+
+# Set environment variables
+ENV SELLER_PORT=8000 \
+    BUYER_PORT=8080
+
+# Set the working directory
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the seller code
+COPY seller/ /app/seller
+
+# Expose the seller port
+EXPOSE $SELLER_PORT
+
+# Set the entrypoint command for the seller
+CMD ["python", "-m", "seller"]
+
+# Copy the buyer code
+COPY buyer/ /app/buyer
+
+# Expose the buyer port
+EXPOSE $BUYER_PORT
+
+# Set the entrypoint command for the buyer
+CMD ["python", "-m", "buyer"]
